@@ -20,4 +20,4 @@ ARG RENDER_SERVICE_NAME=datadog
 ENV DD_BIND_HOST=$RENDER_SERVICE_NAME
 ENV DD_HOSTNAME=$RENDER_SERVICE_NAME
 
-RUN rm /opt/entrypoints/system-probe
+RUN rm /opt/datadog-agent/embedded/bin/system-probe
