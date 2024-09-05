@@ -20,4 +20,5 @@ ARG RENDER_SERVICE_NAME=datadog
 ENV DD_BIND_HOST=$RENDER_SERVICE_NAME
 ENV DD_HOSTNAME=$RENDER_SERVICE_NAME
 
+# TODO: find a better way to disable system-probe (or update its configuration so that it doesn't crash on Render)
 RUN rm /opt/datadog-agent/embedded/bin/system-probe
