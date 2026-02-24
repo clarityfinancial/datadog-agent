@@ -21,3 +21,10 @@ ENV DD_BIND_HOST=$RENDER_SERVICE_NAME
 ENV DD_HOSTNAME=$RENDER_SERVICE_NAME
 
 COPY ntp.yaml /etc/datadog-agent/conf.d/ntp.d/conf.yaml
+
+# DBM: Custom entrypoint that parses DATABASE_URL and writes
+# the Postgres integration config at container startup
+COPY entrypoint.sh /custom-entrypoint.sh
+RUN chmod +x /custom-entrypoint.sh
+
+ENTRYPOINT ["/custom-entrypoint.sh"]
