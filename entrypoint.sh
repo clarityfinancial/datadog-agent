@@ -7,13 +7,13 @@ if [ -n "$DATABASE_URL" ]; then
   # Strip protocol
   url="${DATABASE_URL#*://}"
 
-  # Extract user:password
-  userpass="${url%%@*}"
+  # Extract user:password (use %@* to handle passwords containing @)
+  userpass="${url%@*}"
   DB_USER="${userpass%%:*}"
   DB_PASS="${userpass#*:}"
 
-  # Extract host:port/dbname
-  hostportdb="${url#*@}"
+  # Extract host:port/dbname (use ##*@ to grab everything after the last @)
+  hostportdb="${url##*@}"
   hostport="${hostportdb%%/*}"
   DB_HOST="${hostport%%:*}"
   DB_PORT="${hostport#*:}"
@@ -29,6 +29,8 @@ if [ -n "$DATABASE_URL" ]; then
 
   echo "Configuring Datadog DBM for host: ${DB_HOST}:${DB_PORT}/${DB_NAME}"
 
+  mkdir -p /etc/datadog-agent/conf.d/postgres.d
+
   cat > /etc/datadog-agent/conf.d/postgres.d/conf.yaml <<EOF
 init_config:
 
@@ -43,7 +45,7 @@ instances:
     reported_hostname: ${DB_HOST}
     tags:
       - "env:${DD_ENV:-production}"
-      - "service:clarity-backend"
+      - "service:${DD_SERVICE:-clarity-db}"
     query_samples:
       enabled: true
     query_metrics:
