@@ -46,6 +46,7 @@ instances:
     tags:
       - "env:${DD_ENV:-production}"
       - "service:${DD_SERVICE:-clarity-db}"
+    collect_wal_metrics: false
     query_samples:
       enabled: true
     query_metrics:
